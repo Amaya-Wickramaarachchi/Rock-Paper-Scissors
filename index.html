@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rock, Paper, Scissors Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            padding: 50px;
+        }
+        h1 {
+            color: #6f0936;
+        }
+        .game-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        .choice {
+            cursor: pointer;
+            font-size: 80px;
+            transition: transform 0.3s ease;
+        }
+        .choice:hover {
+            transform: scale(1.2);
+        }
+        .result {
+            margin-top: 30px;
+            font-size: 24px;
+            color: #6f0936;
+        }
+        .animation {
+            font-size: 40px;
+            margin-top: 20px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        .score {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #333;
+        }
+        .reset-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #6f0936;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .reset-button:hover {
+            background-color: #f0936f;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Rock, Paper, Scissors</h1>
+    <div class="game-container">
+        <div class="choice" id="rock"><img src="https://cdn-icons-png.flaticon.com/128/4405/4405457.png" alt="Rock" width="120" height="100"></div>
+        <div class="choice" id="paper">📄</div>
+        <div class="choice" id="scissors">✂️</div>
+    </div>
+
+    <div class="result" id="result">Choose an option to start the game!</div>
+    <div class="animation" id="animation"></div>
+    
+    <div class="score" id="score">Wins: 0 | Losses: 0 | Ties: 0</div>
+
+    <button class="reset-button" id="resetButton">Reset Game</button>
+
+    <script>
+        let wins = 0;
+        let losses = 0;
+        let ties = 0;
+
+        const rock = document.getElementById('rock');
+        const paper = document.getElementById('paper');
+        const scissors = document.getElementById('scissors');
+        const resultText = document.getElementById('result');
+        const scoreText = document.getElementById('score');
+        const animationText = document.getElementById('animation');
+        const resetButton = document.getElementById('resetButton');
+
+        const choices = ['rock', 'paper', 'scissors'];
+
+        const updateScore = () => {
+            scoreText.textContent = `Wins: ${wins} | Losses: ${losses} | Ties: ${ties}`;
+        };
+
+        const gameLogic = (playerChoice) => {
+            const computerChoice = choices[Math.floor(Math.random() * 3)];
+
+            if (playerChoice === computerChoice) {
+                ties++;
+                resultText.textContent = "It's a tie!";
+            } else if (
+                (playerChoice === 'rock' && computerChoice === 'scissors') ||
+                (playerChoice === 'scissors' && computerChoice === 'paper') ||
+                (playerChoice === 'paper' && computerChoice === 'rock')
+            ) {
+                wins++;
+                resultText.textContent = "You win!";
+            } else {
+                losses++;
+                resultText.textContent = "You lose!";
+            }
+
+            updateScore();
+            animationText.textContent = `Computer chose: ${computerChoice} 🤖`;
+            animationText.style.opacity = 1; // Show the computer choice
+        };
+
+        const handleChoice = (choice) => {
+            resultText.textContent = "Waiting for computer's choice...";
+            animationText.style.opacity = 0; // Hide previous animations
+            setTimeout(() => gameLogic(choice), 1000); // Delay for suspense
+        };
+
+        rock.addEventListener('click', () => handleChoice('rock'));
+        paper.addEventListener('click', () => handleChoice('paper'));
+        scissors.addEventListener('click', () => handleChoice('scissors'));
+
+        resetButton.addEventListener('click', () => {
+            wins = 0;
+            losses = 0;
+            ties = 0;
+            updateScore();
+            resultText.textContent = "Choose an option to start the game!";
+            animationText.style.opacity = 0;
+        });
+
+    </script>
+
+</body>
+</html>
